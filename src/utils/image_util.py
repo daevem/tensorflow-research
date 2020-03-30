@@ -39,7 +39,8 @@ class ImageUtil:
         return mask
 
     def load_images(self, images_path, color_mode=-1):
-        png_files = glob.glob(images_path + "/*.png")
+        path_pattern = images_path + "/*.png"
+        png_files = glob.glob(path_pattern)
         png_files = sorted(png_files)
         images = []
         for png_path in png_files:

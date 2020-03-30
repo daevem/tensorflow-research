@@ -192,3 +192,9 @@ class VanillaUnetModel(BaseModel):
         )(conv9)
 
         self.model = Model(inputs=[inputs], outputs=[outputs])
+
+    def train(self):
+
+
+    def summary(self):
+        self.model.summary()

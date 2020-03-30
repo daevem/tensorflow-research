@@ -137,6 +137,7 @@ def main():
 
     # ToDo: Create model
     model = create_model(config)
+    model.summary()
 
     # ToDo: Train model
     model.train()

@@ -49,7 +49,11 @@ class TrainConfig:
         self.alternative_files_path = get_entry(
             root_node, "alternative_files_path", None
         )
-
+        self.mask_files_path = get_entry(root_node, "mask_files_path", None)
+        self.val_files_path = get_entry(root_node, "val_files_path", None)
+        self.val_masks_path = get_entry(root_node, "val_masks_path", None)
+        self.classes = get_entry(root_node, "classes", None)
+        self.val_classes = get_entry(root_node, "val_classes", None)
         self.epochs = get_entry(root_node, "epochs", 10)
         self.batch_size = get_entry(root_node, "batch_size", 1)
         self.learning_rate = get_entry(root_node, "learning_rate", 1e-4)
@@ -58,7 +62,6 @@ class TrainConfig:
         self.momentum = get_entry(root_node, "momentum", 0)
         self.optimizer = get_entry(root_node, "optimizer", None)
         self.validation_split = get_entry(root_node, "validation_split", 0.2)
-        self.mask_files_path = get_entry(root_node, "mask_files_path", None)
         self.checkpoint_save_best_only = get_entry(
             root_node, "checkpoint_save_best_onky", False
         )
@@ -91,6 +94,7 @@ class Config:
         with open(config_path) as json_file:
             data = json.load(json_file)
             self.input_shape = data["input_shape"]
+            self.n_classes = data["n_classes"]
             self.model = get_entry(data, "model", None)
 
             if not self.model:

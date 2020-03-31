@@ -5,7 +5,7 @@ import ntpath
 import cv2
 import numpy as np
 from skimage.util import random_noise
-
+from random import shuffle
 
 class ImageUtil:
     def __init__(self):
@@ -38,12 +38,15 @@ class ImageUtil:
             mask = np.zeros(shape, dtype=np.uint8)
         return mask
 
-    def load_images(self, images_path, color_mode=-1):
-        path_pattern = images_path + "/*.png"
+    def load_images(self, images_path, color_mode=-1, limit=200):
+        path_pattern = images_path + "\\*.jpg"
         png_files = glob.glob(path_pattern)
-        png_files = sorted(png_files)
+        shuffle(png_files)
+        # png_files = sorted(png_files)
         images = []
-        for png_path in png_files:
+        for c, png_path in enumerate(png_files):
+            if c >= limit:
+                break
             images.append(self.load_image(png_path, color_mode))
         return images
 

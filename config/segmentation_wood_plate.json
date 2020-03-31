@@ -1,12 +1,18 @@
 {
-  "input_shape": [512, 512, 1],
+  "input_shape": [1024, 1024, 3],
+  "n_classes": 4,
   "model": "vanilla_unet",
   "train": {
     "batch_size": 10,
     "epochs": 50,
     "learning_rate": 1e-5,
-    "files_path": "C:\\Users\\dadem\\Workspaces\\PythonWorkspace\\tensorflow-research\\img\\wood_plate\\train",
-    "mask_files_path": "C:\\Users\\dadem\\Workspaces\\PythonWorkspace\\tensorflow-research\\img\\wood_plate\\train\\masks",
+    "files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\images",
+    "mask_files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\labels",
+    "val_files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\images",
+    "val_masks_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\labels",
+    "classes": ["Train"],
+    "val_classes": ["Val"],
+    "loss": "sparse_categorical_crossentropy",
     "checkpoints_path": "model_checkpoints",
     "checkpoint_save_period": 50,
     "checkpoint_path": "",
@@ -14,12 +20,12 @@
     "image_data_generator": {
       "loop_count": 10,
       "horizontal_flip": true,
-      "featurewise_center": true,
-      "featurewise_std_normalization": true,
-      "zoom_range": 0.3,
-      "width_shift_range": 0.3,
-      "height_shift_range": 0.3,
-      "rotation_range": 10
+      "featurewise_center": false,
+      "featurewise_std_normalization": false,
+      "zoom_range": 0.0,
+      "width_shift_range": 0.0,
+      "height_shift_range": 0.0,
+      "rotation_range": 0
     }
   },
   "eval": {

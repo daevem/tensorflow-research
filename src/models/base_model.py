@@ -5,6 +5,8 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.ma as ma
+import cv2
+import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.optimizers import SGD, Adadelta, Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -12,6 +14,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from utils import *
 from utils.plots import *
 from utils.image_data_generator import *
+from utils.segmentation_data_generator import *
 
 
 class BaseModel:
@@ -37,7 +40,6 @@ class BaseModel:
         else:
             self.compile()
         self.load_weights()
-        self.model = None
 
     @abc.abstractmethod
     def create_model(self):
@@ -85,8 +87,8 @@ class BaseModel:
             self.callbacks.append(
                 ModelCheckpoint(
                     self.config.train.checkpoints_path + "/model-{epoch:04d}.ckpts",
-                    save_freq=self.config.train.checkpoint_save_period
-                    * len(self.train_images),
+                    save_freq=self.config.train.checkpoint_save_period,
+                    #* len(self.train_images),
                     save_weights_only=True,
                     save_best_only=self.config.train.checkpoint_save_best_only,
                 )
@@ -107,14 +109,14 @@ class BaseModel:
 
     def train(self):
         self.history = self.model.fit(
-            self.train_images,
-            self.y_train,
-            batch_size=self.config.train.batch_size,
+            self.generators,
+            # batch_size=self.config.train.batch_size,
             epochs=self.config.train.epochs,
             callbacks=self.callbacks,
-            shuffle=True,
-            initial_epoch=self.initial_epoch,
-            validation_split=self.config.train.validation_split,
+            # shuffle=True,
+            # initial_epoch=self.initial_epoch,
+            # validation_split=self.config.train.validation_split,
+            validation_data=self.val_generators
         )
 
     def predict(self, test_images):
@@ -130,10 +132,10 @@ class BaseModel:
     def prepare_training(self):
         self.train_images = None
         self.y_train = None
-        self.train_images = self.load_images(
-            self.config.train.files_path, self.config.input_shape
+        train_images = self.load_images(
+            self.config.train.files_path + "\\" + self.config.train.classes[0], self.config.input_shape
         )
-        self.train_images = np.array(self.train_images, dtype=np.float32)
+        train_images = np.array(train_images)  # , dtype=np.float32)
 
         # The following lines are commented because mask files are provided for all train images in DATM dataset
 
@@ -150,9 +152,23 @@ class BaseModel:
         # self.y_train = np.array(self.y_train, dtype=np.float32)
 
         # Create train generator
-        x, y = self.generate_datagen(self.train_images, self.y_train)
-        self.train_images = x
-        self.y_train = y
+        x, y = self.generate_directory_datagen(self.config.train.files_path,
+                                               self.config.train.mask_files_path,
+                                               # train_images,
+                                               classes=self.config.train.classes)
+        self.generators = SegmentationDataGenerator(x, y)  # self.image_mask_generator(x, y)
+
+        x, y = self.generate_directory_datagen(self.config.train.val_files_path,
+                                               self.config.train.val_masks_path,
+                                               # train_images,  # to achieve same feature-wise stdization
+                                               classes=self.config.train.val_classes)
+        self.val_generators = SegmentationDataGenerator(x, y)  # self.image_mask_generator(x, y)
+        # self.train_images = x
+        # self.y_train = y
+
+    def image_mask_generator(self, gen_x, gen_y):
+        while True:
+            yield next(gen_x), next(gen_y)
 
     def generate_datagen(self, x, y=None):
         train_datagen = None
@@ -191,21 +207,18 @@ class BaseModel:
 
             return np.array(tmp_train), np.array(tmp_y)
 
-    def generate__directory_datagen(self, x_path, y_path, x=None):
+    def generate_directory_datagen(self, x_path, y_path, x=None, classes=None):
         """
         generates a tuple of two flow_from_directory generators to be used in segmentation tasks
         :param x_path:
         :param y_path:
         :param x: batch of images to be used to fit the train generator
-        (needed for featurewise and whitening preprocessing)
+        (needed for feature-wise and whitening pre-processing)
         :return: Tuple(train_generator, mask_generator)
         """
         train_datagen = None
         y_train_datagen = None
         if self.config.train.image_data_generator:
-            classes = []
-            for _ in range(len(x)):
-                classes.append(0)
             seed = 33
 
             train_datagen = create_image_data_generator(
@@ -214,17 +227,20 @@ class BaseModel:
             y_config = self.config.train.image_data_generator  # type: utils.config.ImageGeneratorConfig
             y_config.featurewise_center = False
             y_config.featurewise_std_normalization = False
-            y_train_datagen = create_image_data_generator(
+            y_train_datagen = create_mask_data_generator(
                 y_config
             )
 
             if x is not None:
                 train_datagen.fit(x, augment=True, seed=seed)
 
-            train_gen = train_datagen.flow_from_directory(x_path, batch_size=1, seed=seed, class_mode=None)
-            train_y_gen = y_train_datagen.flow_from_directory(y_path, batch_size=1, seed=seed, class_mode=None)
+            train_gen = train_datagen.flow_from_directory(x_path, batch_size=1, seed=seed, classes=classes,
+                                                          class_mode=None)
+            train_y_gen = y_train_datagen.flow_from_directory(y_path, batch_size=1, seed=seed,
+                                                              color_mode="grayscale", classes=classes,
+                                                              class_mode=None)
 
-            return zip(train_gen, train_y_gen)
+            return train_gen, train_y_gen
 
     def load_image(self, path, target_shape=(256, 256, 1)):
         mode = self.image_util.get_color_mode(target_shape[2])

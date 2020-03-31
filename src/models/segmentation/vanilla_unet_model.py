@@ -11,6 +11,7 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.activations import elu
 from tensorflow.keras.models import Model
+from utils.metrics import SparseMeanIoU
 
 
 class VanillaUnetModel(BaseModel):
@@ -20,12 +21,14 @@ class VanillaUnetModel(BaseModel):
     def create_optimizer(self, optimizer="adam"):
         super().create_optimizer(optimizer=optimizer)
 
-    def compile(self, loss="binary_crossentropy"):
-        self.model.compile(optimizer=self.optimizer, loss=loss, metrics=["accuracy"])
+    def compile(self, loss="sparse_categorical_crossentropy"):
+        self.model.compile(optimizer=self.optimizer, loss=loss,
+                           metrics=["accuracy", tf.metrics.MeanIoU(num_classes=self.config.n_classes)])
 
     def create_model(self):
         input_shape = self.config.input_shape
-        output_activation = "sigmoid"
+        output_activation = "softmax"
+        n_classes = self.config.n_classes
         kernel_initializer = "he_normal"
         padding = "same"
 
@@ -188,13 +191,10 @@ class VanillaUnetModel(BaseModel):
         )(conv9)
 
         outputs = Conv2D(
-            1, (1, 1), activation=output_activation, name=self.output_name
+            n_classes, (1, 1), activation=output_activation, name=self.output_name
         )(conv9)
 
         self.model = Model(inputs=[inputs], outputs=[outputs])
-
-    def train(self):
-
 
     def summary(self):
         self.model.summary()

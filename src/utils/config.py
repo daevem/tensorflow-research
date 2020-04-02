@@ -88,6 +88,15 @@ class TrainConfig:
             self.early_stopping = None
 
 
+class ModelParamsConfig:
+    def __init__(self, root_node):
+        self.raw = root_node
+        self.backbone = get_entry(root_node, "backbone", "resnet50")
+        self.pretrained_on = get_entry(root_node, "pretrained_on", None)
+        self.freeze_layers = get_entry(root_node, "freeze_layers", -1)
+        self.upsample_mode = get_entry(root_node, "upsample_mode", "deconv")
+
+
 class Config:
     def __init__(self, config_path):
         super().__init__()
@@ -111,6 +120,11 @@ class Config:
                 self.train = TrainConfig(data["train"])
             except:
                 raise ValueError("Could not create train configuration!")
+
+            try:
+                self.model_params = ModelParamsConfig(data["model_params"])
+            except:
+                self.model_params = None
 
             try:
                 self.image_data_generator = ImageGeneratorConfig(

@@ -18,6 +18,8 @@ def create_model(config):
         model_container = CustomUnetModel(config)
     elif config.model == "vanilla_unet":
         model_container = VanillaUnetModel(config)
+    elif config.model == "dynamic_unet":
+        model_container = DynamicUnetModel(config, backbone=config.backbone, pretrained="imagenet")
     elif config.model == "conv_classification":
         model_container = ConvClassificationModel(config)
     elif config.model == "adversarially_classification":

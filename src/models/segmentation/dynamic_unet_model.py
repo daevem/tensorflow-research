@@ -10,16 +10,20 @@ from tensorflow.keras.layers import (
     MaxPooling2D,
     SpatialDropout2D,
     UpSampling2D,
-    concatenate,
+    Concatenate,
+    ZeroPadding2D,
+    Cropping2D
 )
 from tensorflow.keras.models import Model
 from models import BaseModel
+import re
 
 
 class DynamicUnetModel(BaseModel):
     def __init__(self, config):
-        super().__init__(config)
         self.model = None  # type: tf.keras.models.Model
+        super().__init__(config)
+
 
     def create_optimizer(self, optimizer="sgd"):
         super().create_optimizer(optimizer=optimizer)
@@ -29,11 +33,18 @@ class DynamicUnetModel(BaseModel):
             optimizer=self.optimizer, loss=loss, metrics=[iou, iou_thresholded],
         )
 
-    def create_model(self, backbone, upsample_mode="deconv", backbone_freeze_layers=0):
+    def create_model(self):
+        if self.config.model_params.backbone == "resnet50":
+            backbone = tf.keras.applications.ResNet50(input_shape=self.config.input_shape,
+                                                      weights=self.config.model_params.pretrained_on,
+                                                      include_top=False)
+        else:
+            raise ValueError("Unsupported backbone: {}".format(self.config.model_params.backbone))
         self.model = self.dynamic_unet(backbone,
                                        num_classes=self.config.n_classes,
-                                       upsample_mode=upsample_mode,
-                                       backbone_freeze_n=backbone_freeze_layers)
+                                       upsample_mode=self.config.model_params.upsample_mode,
+                                       backbone_freeze_n=self.config.model_params.freeze_layers)
+        return self.model
 
     def summary(self):
         self.model.summary()
@@ -47,13 +58,12 @@ class DynamicUnetModel(BaseModel):
     @staticmethod
     def get_shape_change_idxs(backbone_layers):
         idxs = []
-        previous_shape = None
+        previous_shape = backbone_layers[0].input_shape[0]
         for c, l in enumerate(backbone_layers):
-            if not isinstance(l, MaxPooling2D) and not isinstance(l, Conv2D):
+            if not isinstance(l, MaxPooling2D) and not isinstance(l, Conv2D) and not isinstance(l, Activation):
                 continue
-            if previous_shape is None:
+            if previous_shape > l.output_shape:
                 previous_shape = l.output_shape
-            elif previous_shape != l.output_shape:
                 idxs.append(c)
         return idxs
 
@@ -111,16 +121,28 @@ class DynamicUnetModel(BaseModel):
         filters *= 2  # and double it
 
         x = conv2d_block(
-            inputs=backbone,
+            inputs=backbone.output,
             filters=filters,
             use_batch_norm=use_batch_norm,
             activation=activation,
         )
 
+        # for c, l in enumerate(backbone.layers):
+        #     print(c, str(l).split(".")[-1].split(" ")[0], l.input_shape, " -> ", l.output_shape)
+
+        idxs = [143, 81, 39, 6, 2]
         for i in idxs:
             filters //= 2  # decreasing number of filters with each layer
             x = upsample(filters, (2, 2), strides=(2, 2), padding="same")(x)
-            x = concatenate([x, backbone.layers[i]])
+            concat_layer = backbone.layers[i-1]  # -1 because we want to use the input to the ith layer as skip link
+
+            if isinstance(concat_layer, ZeroPadding2D):
+                concat_layer = Cropping2D(concat_layer.padding)(concat_layer.output)  # remove extra padding
+            # setattr(down_layer, "shape", down_layer.input_shape)
+            if hasattr(concat_layer, "shape"):
+                x = Concatenate()([x, concat_layer])
+            else:
+                x = Concatenate()([x, concat_layer.output])
             x = conv2d_block(
                 inputs=x,
                 filters=filters,

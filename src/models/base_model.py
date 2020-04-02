@@ -33,9 +33,6 @@ class BaseModel:
         else:
             self.create_optimizer()
 
-        if self.config.model == "dynamic_unet":
-            if self.config.model_params.
-            self.create_model()
         self.create_model()
 
         if self.config.train.loss:

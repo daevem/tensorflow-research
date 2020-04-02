@@ -1,7 +1,7 @@
 {
   "input_shape": [1024, 1024, 3],
   "n_classes": 4,
-  "model": "vanilla_unet",
+  "model": "dynamic_unet",
   "model_params": {
     "backbone": "resnet50",
     "pretrained_on": "imagenet",

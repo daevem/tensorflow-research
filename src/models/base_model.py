@@ -234,9 +234,9 @@ class BaseModel:
             if x is not None:
                 train_datagen.fit(x, augment=True, seed=seed)
 
-            train_gen = train_datagen.flow_from_directory(x_path, batch_size=1, seed=seed, classes=classes,
+            train_gen = train_datagen.flow_from_directory(x_path, batch_size=self.config.train.batch_size, seed=seed, classes=classes,
                                                           class_mode=None)
-            train_y_gen = y_train_datagen.flow_from_directory(y_path, batch_size=1, seed=seed,
+            train_y_gen = y_train_datagen.flow_from_directory(y_path, batch_size=self.config.train.batch_size, seed=seed,
                                                               color_mode="grayscale", classes=classes,
                                                               class_mode=None)
 

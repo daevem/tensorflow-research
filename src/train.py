@@ -138,7 +138,7 @@ def main():
     # ToDo: Create model
     model = create_model(config)
     model.summary()
-    sys.exit(0)
+
     # ToDo: Train model
     model.train()
     history = model.history

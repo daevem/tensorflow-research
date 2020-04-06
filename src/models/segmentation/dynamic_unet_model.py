@@ -30,7 +30,8 @@ class DynamicUnetModel(BaseModel):
 
     def compile(self, loss="categorical_crossentropy"):
         self.model.compile(
-            optimizer=self.optimizer, loss=loss, metrics=[iou, iou_thresholded],
+            optimizer=self.optimizer, loss=loss,
+            metrics=["accuracy", tf.keras.metrics.MeanIoU(self.config.n_classes, name="MeanIoU")],
         )
 
     def create_model(self):
@@ -58,11 +59,13 @@ class DynamicUnetModel(BaseModel):
     @staticmethod
     def get_shape_change_idxs(backbone_layers):
         idxs = []
+        n_channels = backbone_layers[0].input_shape[0][-1]
         previous_shape = backbone_layers[0].input_shape[0]
         for c, l in enumerate(backbone_layers):
             if not isinstance(l, MaxPooling2D) and not isinstance(l, Conv2D) and not isinstance(l, Activation):
                 continue
-            if previous_shape > l.output_shape:
+            if n_channels < l.output_shape[-1]:
+                n_channels = l.output_shape[-1]
                 previous_shape = l.output_shape
                 idxs.append(c)
         return idxs
@@ -88,7 +91,7 @@ class DynamicUnetModel(BaseModel):
         :param use_batch_norm: (bool) Whether to use Batch Normalisation across the channel axis between convolutional layers
         :param upsample_mode: (one of "deconv" or "simple") Whether to use transposed convolutions or simple upsampling in the decoder part
         :param output_activation: (str) A keras.activations.Activation to use. Sigmoid by default for binary segmentation
-        :param backbone_freeze_n: Number of layers to freeze in the backbone model. Use -1 to freeze all (Default -1)
+        :param backbone_freeze_n: Number of (Conv) layers to freeze in the backbone model. Use -1 to freeze all (Default -1)
         :return: The built U-Net model (tf.keras.models.Model)
         [1]: https://arxiv.org/abs/1505.04597
         [2]: https://arxiv.org/pdf/1411.4280.pdf
@@ -104,7 +107,7 @@ class DynamicUnetModel(BaseModel):
         # x = inputs
 
         if backbone_freeze_n > -1:
-            for c, l in enumerate(backbone.layers):
+            for c, l in enumerate([_l for _l in backbone.layers if isinstance(_l, Conv2D)]):
                 if c <= backbone_freeze_n:
                     l.trainable = False
                 else:
@@ -116,25 +119,28 @@ class DynamicUnetModel(BaseModel):
         idxs = DynamicUnetModel.get_shape_change_idxs(backbone.layers)
         # reverse their order to use them in encoder-to-decoder skip connections
         idxs = idxs[::-1]
+        idxs.pop(0)
 
-        filters = backbone.layers[-1].output_shape[1]  # retrieve number of filters in the last layer of the backbone
-        filters *= 2  # and double it
+        filters = backbone.layers[-1].output_shape[-1]  # retrieve number of filters in the last layer of the backbone
+        # filters *= 2  # and double it
 
-        x = conv2d_block(
-            inputs=backbone.output,
-            filters=filters,
-            use_batch_norm=use_batch_norm,
-            activation=activation,
-        )
+        # commented because we are using last resnet block as encoder-to-decoder bridge
+        # x = conv2d_block(
+        #     inputs=backbone.output,
+        #     filters=filters,
+        #     use_batch_norm=use_batch_norm,
+        #     activation=activation,
+        # )
+        x = backbone.output
+        for c, l in enumerate(backbone.layers):
+            print(c, str(l).split(".")[-1].split(" ")[0], l.input_shape, " -> ", l.output_shape)
 
-        # for c, l in enumerate(backbone.layers):
-        #     print(c, str(l).split(".")[-1].split(" ")[0], l.input_shape, " -> ", l.output_shape)
-
-        idxs = [143, 81, 39, 6, 2]
+        # idxs = [143, 81, 39, 6, 2]  # resnet50 layers
         for i in idxs:
-            filters //= 2  # decreasing number of filters with each layer
+            if filters > 16:  # filter n. lower bound
+                filters //= 2  # decreasing number of filters with each layer
             x = upsample(filters, (2, 2), strides=(2, 2), padding="same")(x)
-            concat_layer = backbone.layers[i-1]  # -1 because we want to use the input to the ith layer as skip link
+            concat_layer = backbone.layers[i]  # -1 because we want to use the input to the i-th layer as skip link
 
             if isinstance(concat_layer, ZeroPadding2D):
                 concat_layer = Cropping2D(concat_layer.padding)(concat_layer.output)  # remove extra padding

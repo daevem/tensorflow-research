@@ -93,6 +93,8 @@ class BaseModel:
                     save_best_only=self.config.train.checkpoint_save_best_only,
                 )
             )
+        if self.config.train.tensorboard:
+
 
     def load_weights(self):
         if self.config.train.checkpoint_path:
@@ -132,10 +134,10 @@ class BaseModel:
     def prepare_training(self):
         self.train_images = None
         self.y_train = None
-        train_images = self.load_images(
-            self.config.train.files_path + "\\" + self.config.train.classes[0], self.config.input_shape
-        )
-        train_images = np.array(train_images)  # , dtype=np.float32)
+        # train_images = self.load_images(
+        #     self.config.train.files_path + "\\" + self.config.train.classes[0], self.config.input_shape
+        # )
+        # train_images = np.array(train_images)  # , dtype=np.float32)
 
         # The following lines are commented because mask files are provided for all train images in DATM dataset
 
@@ -234,9 +236,18 @@ class BaseModel:
             if x is not None:
                 train_datagen.fit(x, augment=True, seed=seed)
 
-            train_gen = train_datagen.flow_from_directory(x_path, batch_size=self.config.train.batch_size, seed=seed, classes=classes,
+            target_size = self.config.input_shape
+            if target_size[0] is None and target_size[1] is None:
+                target_size = (1024, 1024)
+            else:
+                target_size = (target_size[0], target_size[1])
+
+            train_gen = train_datagen.flow_from_directory(x_path, batch_size=self.config.train.batch_size, seed=seed,
+                                                          target_size=target_size,
+                                                          classes=classes,
                                                           class_mode=None)
             train_y_gen = y_train_datagen.flow_from_directory(y_path, batch_size=self.config.train.batch_size, seed=seed,
+                                                              target_size=target_size,
                                                               color_mode="grayscale", classes=classes,
                                                               class_mode=None)
 

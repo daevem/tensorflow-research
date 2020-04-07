@@ -24,8 +24,7 @@ class DynamicUnetModel(BaseModel):
         self.model = None  # type: tf.keras.models.Model
         super().__init__(config)
 
-
-    def create_optimizer(self, optimizer="sgd"):
+    def create_optimizer(self, optimizer="adam"):
         super().create_optimizer(optimizer=optimizer)
 
     def compile(self, loss="categorical_crossentropy"):
@@ -132,8 +131,8 @@ class DynamicUnetModel(BaseModel):
         #     activation=activation,
         # )
         x = backbone.output
-        for c, l in enumerate(backbone.layers):
-            print(c, str(l).split(".")[-1].split(" ")[0], l.input_shape, " -> ", l.output_shape)
+        # for c, l in enumerate(backbone.layers):
+        #     print(c, str(l).split(".")[-1].split(" ")[0], l.input_shape, " -> ", l.output_shape)
 
         # idxs = [143, 81, 39, 6, 2]  # resnet50 layers
         for i in idxs:

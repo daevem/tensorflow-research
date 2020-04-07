@@ -1,18 +1,18 @@
 {
-  "input_shape": [512, 512, 3],
+  "input_shape": [null, null, 3],
   "n_classes": 4,
   "model": "dynamic_unet",
   "model_params": {
     "backbone": "resnet50",
     "pretrained_on": "imagenet",
-    "freeze_layers": 0,
+    "freeze_layers": 10,
     "upsample_mode": "deconv"
   },
   "train": {
-    "batch_size": 4,
+    "batch_size": 1,
     "epochs": 50,
-    "learning_rate": 1e-3,
-    "decay": 5e-4,
+    "learning_rate": 1e-4,
+    "decay": 1e-5,
     "files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\images",
     "mask_files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\labels",
     "val_files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\images",

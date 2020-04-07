@@ -71,6 +71,7 @@ class TrainConfig:
         self.early_stopping_val_loss_epochs = get_entry(
             root_node, "early_stopping_val_loss_epochs", 0
         )
+        self.tensorboard = get_entry(root_node, "tensorboard", False)
 
         if not self.files_path:
             raise ValueError("Configuration needs the path to the training files!")

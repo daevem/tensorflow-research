@@ -72,6 +72,11 @@ class TrainConfig:
             root_node, "early_stopping_val_loss_epochs", 0
         )
         self.tensorboard = get_entry(root_node, "tensorboard", False)
+        if self.tensorboard:
+            self.tensorboard_logdir = get_entry(root_node, "tensorboard_logdir", None)
+            if self.tensorboard_logdir is None:
+                raise ValueError("Parameter 'tensorflow_logdir' must be specified in configuration file "
+                                 "if 'tensorboard' is set to True.")
 
         if not self.files_path:
             raise ValueError("Configuration needs the path to the training files!")

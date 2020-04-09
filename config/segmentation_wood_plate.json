@@ -21,9 +21,11 @@
     "val_classes": ["Val"],
     "loss": "sparse_categorical_crossentropy",
     "checkpoints_path": "model_checkpoints",
-    "checkpoint_save_period": 50,
+    "checkpoint_save_period": 5,
     "checkpoint_path": "",
     "checkpoint_save_best_only": true,
+    "tensorboard": true,
+    "tensorboard_logdir": "tensorboard\\resnet50_unet_vertical_and_random_slices_catBNrelu",
     "image_data_generator": {
       "loop_count": 10,
       "horizontal_flip": true,

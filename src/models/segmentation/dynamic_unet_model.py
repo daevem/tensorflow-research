@@ -148,6 +148,8 @@ class DynamicUnetModel(BaseModel):
                 x = Concatenate()([x, concat_layer])
             else:
                 x = Concatenate()([x, concat_layer.output])
+            x = BatchNormalization()(x)
+            x = Activation("relu")(x)
             x = conv2d_block(
                 inputs=x,
                 filters=filters,
@@ -211,7 +213,7 @@ def conv2d_block(
         raise ValueError(
             f"dropout_type must be one of ['spatial', 'standard'], got {dropout_type}"
         )
-
+    # TODO consider restiling conv+relu+bn to conv+bn+relu
     c = Conv2D(
         filters,
         kernel_size,

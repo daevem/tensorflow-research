@@ -6,7 +6,7 @@ import numpy as np
 
 class SegmentationDataGenerator(Sequence):
 
-    def __init__(self, image_generator_flow, mask_generator_flow, slicing_rate=1.0, slice_sizes=None):
+    def __init__(self, image_generator_flow, mask_generator_flow, slicing_rate=0.7, slice_sizes=None):
         self.gen_x = image_generator_flow  # type: ImageDataGenerator.flow_from_directory()
         self.gen_y = mask_generator_flow
         if slice_sizes is not None:

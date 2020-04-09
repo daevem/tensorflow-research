@@ -7,7 +7,7 @@ import numpy as np
 import numpy.ma as ma
 import cv2
 import tensorflow as tf
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from tensorflow.keras.optimizers import SGD, Adadelta, Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -87,14 +87,15 @@ class BaseModel:
             self.callbacks.append(
                 ModelCheckpoint(
                     self.config.train.checkpoints_path + "/model-{epoch:04d}.ckpts",
-                    save_freq=self.config.train.checkpoint_save_period,
-                    #* len(self.train_images),
+                    save_freq=self.config.train.checkpoint_save_period * len(self.generators),  # save every time the model sees  n*number of training samples
                     save_weights_only=True,
                     save_best_only=self.config.train.checkpoint_save_best_only,
                 )
             )
         if self.config.train.tensorboard:
-
+            self.callbacks.append(
+                TensorBoard(self.config.train.tensorboard_logdir, profile_batch=0, histogram_freq=5)
+            )
 
     def load_weights(self):
         if self.config.train.checkpoint_path:
@@ -125,8 +126,14 @@ class BaseModel:
         self.predictions = []
         for img in test_images:
             self.predictions.append(
-                self.model.predict(np.array([img], dtype=np.float32), batch_size=1)
+                self.model.predict(np.array([img], dtype=np.float32), batch_size=1)[0]
             )
+        return self.predictions
+
+    def save(self, save_name=None):
+        if save_name is None:
+            save_name = self.config.model + "_epochs" + len(self.history) + "_valMeanIoU" + self.history.history["val_MeanIoU"][-1]
+        self.model.save(save_name, save_format="h5")
 
     def plot_predictions(self, test_images):
         plot_prediction(self.config, self.predictions, test_images)

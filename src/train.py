@@ -2,6 +2,7 @@ import argparse
 import os
 import random
 import sys
+import cv2
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -136,22 +137,71 @@ def main():
         pass
 
     # ToDo: Create model
-    model = create_model(config)
+    model = create_model(config)  # type: BaseModel
     model.summary()
 
     # ToDo: Train model
-    model.train()
-    history = model.history
-    if not history == None:
-        epochs = len(history.epoch) + model.initial_epoch
-        model.model.save_weights(
-            config.train.checkpoints_path + "/model-{0:04d}.ckpts".format(epochs)
-        )
+    # model.train()
+    # history = model.history
+    # if history is not None:
+    #     epochs = len(history.epoch) + model.initial_epoch
+    #     # model.model.save_weights(
+    #     #     config.train.checkpoints_path + "/model-{0:04d}.ckpts".format(epochs)
+    #     # )
+    #     model.save("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
+    #     if plot_history:
+    #         model.plot_history()
+    model.model = tf.keras.models.load_model("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
+    val_path = os.path.join(config.train.val_files_path, config.train.val_classes[0])
+    val_masks_path = os.path.join(config.train.val_masks_path, config.train.val_classes[0])
+    images = os.listdir(val_path)
+    random.shuffle(images)
+    images = images[:10]
+    test_images = []
+    for f in images:
+        test_images.append(cv2.imread(os.path.join(val_path, f)))
+    mask_files = ["".join(f.split(".")[0]) + "_gray.png" for f in images]
+    gray_masks = []
+    for f in mask_files:
+        gray_masks.append(cv2.imread(os.path.join(val_masks_path, f), cv2.IMREAD_GRAYSCALE))
+    color_masks = []
+    color_map = {
+        0: [0, 0, 0],
+        1: [255, 0, 0],
+        2: [0, 255, 0],
+        3: [0, 0, 255]
+    }
+    for m in gray_masks:
+        cm = get_colorized_map(m, color_map)
+        color_masks.append(cm)
 
-        if plot_history:
-            model.plot_history()
+    predictions = np.array(model.predict(test_images))
 
+    amax = np.argmax(predictions, axis=-1)
+    colorized_predictions = []
+    for pred in amax:
+        cm = get_colorized_map(pred, color_map)
+        colorized_predictions.append(cm)
+
+    for mask_name, gt, pred in zip(mask_files, color_masks, colorized_predictions):
+        base_name = mask_name.strip("_gray.png")
+        mask_name = base_name + "_color_gt.png"
+        pred_name = base_name + "_color_pred.png"
+        path_to_pred = os.path.join("predictions", "resnet50_unet_vertical_and_random_slices_catBNrelu")
+        os.makedirs(path_to_pred, exist_ok=True)
+        cv2.imwrite(os.path.join(path_to_pred, mask_name), gt)
+        cv2.imwrite(os.path.join(path_to_pred, pred_name), pred)
     K.clear_session()
+
+
+def get_colorized_map(grayscale_image, color_map):
+    m = grayscale_image
+    color_mask = np.zeros(m.shape + (3,), dtype=np.uint8)
+    color_mask[m == 0] = color_map[0]
+    color_mask[m == 1] = color_map[1]
+    color_mask[m == 2] = color_map[2]
+    color_mask[m == 3] = color_map[3]
+    return color_mask
 
 
 if __name__ == "__main__":

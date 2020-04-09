@@ -136,3 +136,5 @@ checkpoints/*
 
 .idea/
 src/model_checkpoints/
+src/predictions/
+*.h5

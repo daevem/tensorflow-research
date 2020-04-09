@@ -141,17 +141,17 @@ def main():
     model.summary()
 
     # ToDo: Train model
-    # model.train()
-    # history = model.history
-    # if history is not None:
-    #     epochs = len(history.epoch) + model.initial_epoch
-    #     # model.model.save_weights(
-    #     #     config.train.checkpoints_path + "/model-{0:04d}.ckpts".format(epochs)
-    #     # )
-    #     model.save("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
-    #     if plot_history:
-    #         model.plot_history()
-    model.model = tf.keras.models.load_model("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
+    model.train()
+    history = model.history
+    if history is not None:
+        epochs = len(history.epoch) + model.initial_epoch
+        # model.model.save_weights(
+        #     config.train.checkpoints_path + "/model-{0:04d}.ckpts".format(epochs)
+        # )
+        model.save("resnet50_unet_vertical_and_random_slices_catBNrelu_freeze0_featurewise.h5")
+        if plot_history:
+            model.plot_history()
+    # model.model = tf.keras.models.load_model("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
     val_path = os.path.join(config.train.val_files_path, config.train.val_classes[0])
     val_masks_path = os.path.join(config.train.val_masks_path, config.train.val_classes[0])
     images = os.listdir(val_path)
@@ -191,6 +191,8 @@ def main():
         os.makedirs(path_to_pred, exist_ok=True)
         cv2.imwrite(os.path.join(path_to_pred, mask_name), gt)
         cv2.imwrite(os.path.join(path_to_pred, pred_name), pred)
+
+    print("Training completed, predictions built.")
     K.clear_session()
 
 

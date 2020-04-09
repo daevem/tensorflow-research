@@ -17,6 +17,11 @@ from utils.image_data_generator import *
 from utils.segmentation_data_generator import *
 
 
+# ImageNet Stats https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/data_generators/imagenet.py
+MEAN_RGB = [0.485, 0.456, 0.406]
+STDDEV_RGB = [0.229, 0.224, 0.225]
+
+
 class BaseModel:
     def __init__(self, config):
         super().__init__()
@@ -132,7 +137,7 @@ class BaseModel:
 
     def save(self, save_name=None):
         if save_name is None:
-            save_name = self.config.model + "_epochs" + len(self.history) + "_valMeanIoU" + self.history.history["val_MeanIoU"][-1]
+            save_name = self.config.model + "_epochs" + str(len(self.history)) + "_valMeanIoU" + self.history.history["val_MeanIoU"][-1]
         self.model.save(save_name, save_format="h5")
 
     def plot_predictions(self, test_images):
@@ -242,7 +247,11 @@ class BaseModel:
 
             if x is not None:
                 train_datagen.fit(x, augment=True, seed=seed)
-
+            else:
+                train_datagen.mean = MEAN_RGB
+                std = np.expand_dims(STDDEV_RGB, axis=0)
+                std = np.expand_dims(std, axis=0)
+                train_datagen.std = std
             target_size = self.config.input_shape
             if target_size[0] is None and target_size[1] is None:
                 target_size = (1024, 1024)

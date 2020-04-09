@@ -16,6 +16,7 @@ class ImageGeneratorConfig:
         self.raw = root_node
         self.loop_count = get_entry(root_node, "loop_count", 1)
         self.horizonal_flip = get_entry(root_node, "horizontal_flip", False)
+        self.vertical_flip = get_entry(root_node, "vertical_flip", False)
         self.zoom_range = get_entry(root_node, "zoom_range", 0)
         self.width_shift_range = get_entry(root_node, "width_shift_range", 0)
         self.height_shift_range = get_entry(root_node, "height_shift_range", 0)
@@ -24,6 +25,8 @@ class ImageGeneratorConfig:
         self.featurewise_std_normalization = get_entry(
             root_node, "featurewise_std_normalization", False
         )
+        self.samplewise_center = get_entry(root_node, "samplewise_center", False)
+        self.samplewise_std_normalization = get_entry(root_node, "samplewise_std_normalization", False)
 
 
 class EvalConfig:

@@ -10,7 +10,7 @@
   },
   "train": {
     "batch_size": 1,
-    "epochs": 50,
+    "epochs": 10,
     "learning_rate": 5e-3,
     "decay": 1e-5,
     "files_path": "C:\\Users\\dmanna\\Desktop\\DATM_dev\\data\\reachu_dataset_poles\\images",

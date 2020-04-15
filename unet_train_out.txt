@@ -1,0 +1,513 @@
+2020-04-15 11:05:34.303592: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-04-15 11:05:34.330118: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:0a:00.0 name: GeForce RTX 2080 Ti computeCapability: 7.5
+coreClock: 1.545GHz coreCount: 68 deviceMemorySize: 10.76GiB deviceMemoryBandwidth: 573.69GiB/s
+2020-04-15 11:05:34.330307: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-15 11:05:34.331683: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-15 11:05:34.333157: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-15 11:05:34.333362: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-15 11:05:34.334734: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-15 11:05:34.335409: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-15 11:05:34.338301: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-15 11:05:34.339748: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-04-15 11:05:34.795131: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2020-04-15 11:05:34.820805: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3492975000 Hz
+2020-04-15 11:05:34.823207: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55bdc0d6a2b0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-04-15 11:05:34.823244: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-04-15 11:05:34.824801: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:0a:00.0 name: GeForce RTX 2080 Ti computeCapability: 7.5
+coreClock: 1.545GHz coreCount: 68 deviceMemorySize: 10.76GiB deviceMemoryBandwidth: 573.69GiB/s
+2020-04-15 11:05:34.824892: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-15 11:05:34.824917: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-15 11:05:34.824937: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-15 11:05:34.824959: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-15 11:05:34.824981: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-15 11:05:34.825001: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-15 11:05:34.825024: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-15 11:05:34.827362: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-04-15 11:05:34.827418: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-15 11:05:34.927917: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-04-15 11:05:34.927948: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-04-15 11:05:34.927953: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-04-15 11:05:34.930001: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10311 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:0a:00.0, compute capability: 7.5)
+2020-04-15 11:05:34.931687: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55bdc51e5670 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-04-15 11:05:34.931700: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2080 Ti, Compute Capability 7.5
+Found 2783 images belonging to 1 classes.
+Found 2783 images belonging to 1 classes.
+Found 695 images belonging to 1 classes.
+Found 695 images belonging to 1 classes.
+Model: "model"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            [(None, None, None,  0                                            
+__________________________________________________________________________________________________
+conv1_pad (ZeroPadding2D)       (None, None, None, 3 0           input_1[0][0]                    
+__________________________________________________________________________________________________
+conv1_conv (Conv2D)             (None, None, None, 6 9472        conv1_pad[0][0]                  
+__________________________________________________________________________________________________
+conv1_bn (BatchNormalization)   (None, None, None, 6 256         conv1_conv[0][0]                 
+__________________________________________________________________________________________________
+conv1_relu (Activation)         (None, None, None, 6 0           conv1_bn[0][0]                   
+__________________________________________________________________________________________________
+pool1_pad (ZeroPadding2D)       (None, None, None, 6 0           conv1_relu[0][0]                 
+__________________________________________________________________________________________________
+pool1_pool (MaxPooling2D)       (None, None, None, 6 0           pool1_pad[0][0]                  
+__________________________________________________________________________________________________
+conv2_block1_1_conv (Conv2D)    (None, None, None, 6 4160        pool1_pool[0][0]                 
+__________________________________________________________________________________________________
+conv2_block1_1_bn (BatchNormali (None, None, None, 6 256         conv2_block1_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_1_relu (Activation (None, None, None, 6 0           conv2_block1_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block1_2_conv (Conv2D)    (None, None, None, 6 36928       conv2_block1_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_2_bn (BatchNormali (None, None, None, 6 256         conv2_block1_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_2_relu (Activation (None, None, None, 6 0           conv2_block1_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block1_0_conv (Conv2D)    (None, None, None, 2 16640       pool1_pool[0][0]                 
+__________________________________________________________________________________________________
+conv2_block1_3_conv (Conv2D)    (None, None, None, 2 16640       conv2_block1_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_0_bn (BatchNormali (None, None, None, 2 1024        conv2_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_3_bn (BatchNormali (None, None, None, 2 1024        conv2_block1_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block1_add (Add)          (None, None, None, 2 0           conv2_block1_0_bn[0][0]          
+                                                                 conv2_block1_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block1_out (Activation)   (None, None, None, 2 0           conv2_block1_add[0][0]           
+__________________________________________________________________________________________________
+conv2_block2_1_conv (Conv2D)    (None, None, None, 6 16448       conv2_block1_out[0][0]           
+__________________________________________________________________________________________________
+conv2_block2_1_bn (BatchNormali (None, None, None, 6 256         conv2_block2_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block2_1_relu (Activation (None, None, None, 6 0           conv2_block2_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block2_2_conv (Conv2D)    (None, None, None, 6 36928       conv2_block2_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block2_2_bn (BatchNormali (None, None, None, 6 256         conv2_block2_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block2_2_relu (Activation (None, None, None, 6 0           conv2_block2_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block2_3_conv (Conv2D)    (None, None, None, 2 16640       conv2_block2_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block2_3_bn (BatchNormali (None, None, None, 2 1024        conv2_block2_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block2_add (Add)          (None, None, None, 2 0           conv2_block1_out[0][0]           
+                                                                 conv2_block2_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block2_out (Activation)   (None, None, None, 2 0           conv2_block2_add[0][0]           
+__________________________________________________________________________________________________
+conv2_block3_1_conv (Conv2D)    (None, None, None, 6 16448       conv2_block2_out[0][0]           
+__________________________________________________________________________________________________
+conv2_block3_1_bn (BatchNormali (None, None, None, 6 256         conv2_block3_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block3_1_relu (Activation (None, None, None, 6 0           conv2_block3_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block3_2_conv (Conv2D)    (None, None, None, 6 36928       conv2_block3_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block3_2_bn (BatchNormali (None, None, None, 6 256         conv2_block3_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block3_2_relu (Activation (None, None, None, 6 0           conv2_block3_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block3_3_conv (Conv2D)    (None, None, None, 2 16640       conv2_block3_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv2_block3_3_bn (BatchNormali (None, None, None, 2 1024        conv2_block3_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv2_block3_add (Add)          (None, None, None, 2 0           conv2_block2_out[0][0]           
+                                                                 conv2_block3_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv2_block3_out (Activation)   (None, None, None, 2 0           conv2_block3_add[0][0]           
+__________________________________________________________________________________________________
+conv3_block1_1_conv (Conv2D)    (None, None, None, 1 32896       conv2_block3_out[0][0]           
+__________________________________________________________________________________________________
+conv3_block1_1_bn (BatchNormali (None, None, None, 1 512         conv3_block1_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_1_relu (Activation (None, None, None, 1 0           conv3_block1_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block1_2_conv (Conv2D)    (None, None, None, 1 147584      conv3_block1_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_2_bn (BatchNormali (None, None, None, 1 512         conv3_block1_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_2_relu (Activation (None, None, None, 1 0           conv3_block1_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block1_0_conv (Conv2D)    (None, None, None, 5 131584      conv2_block3_out[0][0]           
+__________________________________________________________________________________________________
+conv3_block1_3_conv (Conv2D)    (None, None, None, 5 66048       conv3_block1_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_0_bn (BatchNormali (None, None, None, 5 2048        conv3_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_3_bn (BatchNormali (None, None, None, 5 2048        conv3_block1_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block1_add (Add)          (None, None, None, 5 0           conv3_block1_0_bn[0][0]          
+                                                                 conv3_block1_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block1_out (Activation)   (None, None, None, 5 0           conv3_block1_add[0][0]           
+__________________________________________________________________________________________________
+conv3_block2_1_conv (Conv2D)    (None, None, None, 1 65664       conv3_block1_out[0][0]           
+__________________________________________________________________________________________________
+conv3_block2_1_bn (BatchNormali (None, None, None, 1 512         conv3_block2_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block2_1_relu (Activation (None, None, None, 1 0           conv3_block2_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block2_2_conv (Conv2D)    (None, None, None, 1 147584      conv3_block2_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block2_2_bn (BatchNormali (None, None, None, 1 512         conv3_block2_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block2_2_relu (Activation (None, None, None, 1 0           conv3_block2_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block2_3_conv (Conv2D)    (None, None, None, 5 66048       conv3_block2_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block2_3_bn (BatchNormali (None, None, None, 5 2048        conv3_block2_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block2_add (Add)          (None, None, None, 5 0           conv3_block1_out[0][0]           
+                                                                 conv3_block2_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block2_out (Activation)   (None, None, None, 5 0           conv3_block2_add[0][0]           
+__________________________________________________________________________________________________
+conv3_block3_1_conv (Conv2D)    (None, None, None, 1 65664       conv3_block2_out[0][0]           
+__________________________________________________________________________________________________
+conv3_block3_1_bn (BatchNormali (None, None, None, 1 512         conv3_block3_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block3_1_relu (Activation (None, None, None, 1 0           conv3_block3_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block3_2_conv (Conv2D)    (None, None, None, 1 147584      conv3_block3_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block3_2_bn (BatchNormali (None, None, None, 1 512         conv3_block3_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block3_2_relu (Activation (None, None, None, 1 0           conv3_block3_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block3_3_conv (Conv2D)    (None, None, None, 5 66048       conv3_block3_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block3_3_bn (BatchNormali (None, None, None, 5 2048        conv3_block3_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block3_add (Add)          (None, None, None, 5 0           conv3_block2_out[0][0]           
+                                                                 conv3_block3_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block3_out (Activation)   (None, None, None, 5 0           conv3_block3_add[0][0]           
+__________________________________________________________________________________________________
+conv3_block4_1_conv (Conv2D)    (None, None, None, 1 65664       conv3_block3_out[0][0]           
+__________________________________________________________________________________________________
+conv3_block4_1_bn (BatchNormali (None, None, None, 1 512         conv3_block4_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block4_1_relu (Activation (None, None, None, 1 0           conv3_block4_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block4_2_conv (Conv2D)    (None, None, None, 1 147584      conv3_block4_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block4_2_bn (BatchNormali (None, None, None, 1 512         conv3_block4_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block4_2_relu (Activation (None, None, None, 1 0           conv3_block4_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block4_3_conv (Conv2D)    (None, None, None, 5 66048       conv3_block4_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv3_block4_3_bn (BatchNormali (None, None, None, 5 2048        conv3_block4_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv3_block4_add (Add)          (None, None, None, 5 0           conv3_block3_out[0][0]           
+                                                                 conv3_block4_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv3_block4_out (Activation)   (None, None, None, 5 0           conv3_block4_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block1_1_conv (Conv2D)    (None, None, None, 2 131328      conv3_block4_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block1_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block1_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_1_relu (Activation (None, None, None, 2 0           conv4_block1_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block1_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block1_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block1_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_2_relu (Activation (None, None, None, 2 0           conv4_block1_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block1_0_conv (Conv2D)    (None, None, None, 1 525312      conv3_block4_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block1_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block1_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_0_bn (BatchNormali (None, None, None, 1 4096        conv4_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block1_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block1_add (Add)          (None, None, None, 1 0           conv4_block1_0_bn[0][0]          
+                                                                 conv4_block1_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block1_out (Activation)   (None, None, None, 1 0           conv4_block1_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block2_1_conv (Conv2D)    (None, None, None, 2 262400      conv4_block1_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block2_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block2_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block2_1_relu (Activation (None, None, None, 2 0           conv4_block2_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block2_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block2_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block2_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block2_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block2_2_relu (Activation (None, None, None, 2 0           conv4_block2_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block2_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block2_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block2_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block2_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block2_add (Add)          (None, None, None, 1 0           conv4_block1_out[0][0]           
+                                                                 conv4_block2_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block2_out (Activation)   (None, None, None, 1 0           conv4_block2_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block3_1_conv (Conv2D)    (None, None, None, 2 262400      conv4_block2_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block3_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block3_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block3_1_relu (Activation (None, None, None, 2 0           conv4_block3_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block3_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block3_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block3_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block3_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block3_2_relu (Activation (None, None, None, 2 0           conv4_block3_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block3_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block3_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block3_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block3_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block3_add (Add)          (None, None, None, 1 0           conv4_block2_out[0][0]           
+                                                                 conv4_block3_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block3_out (Activation)   (None, None, None, 1 0           conv4_block3_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block4_1_conv (Conv2D)    (None, None, None, 2 262400      conv4_block3_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block4_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block4_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block4_1_relu (Activation (None, None, None, 2 0           conv4_block4_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block4_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block4_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block4_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block4_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block4_2_relu (Activation (None, None, None, 2 0           conv4_block4_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block4_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block4_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block4_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block4_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block4_add (Add)          (None, None, None, 1 0           conv4_block3_out[0][0]           
+                                                                 conv4_block4_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block4_out (Activation)   (None, None, None, 1 0           conv4_block4_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block5_1_conv (Conv2D)    (None, None, None, 2 262400      conv4_block4_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block5_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block5_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block5_1_relu (Activation (None, None, None, 2 0           conv4_block5_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block5_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block5_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block5_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block5_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block5_2_relu (Activation (None, None, None, 2 0           conv4_block5_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block5_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block5_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block5_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block5_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block5_add (Add)          (None, None, None, 1 0           conv4_block4_out[0][0]           
+                                                                 conv4_block5_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block5_out (Activation)   (None, None, None, 1 0           conv4_block5_add[0][0]           
+__________________________________________________________________________________________________
+conv4_block6_1_conv (Conv2D)    (None, None, None, 2 262400      conv4_block5_out[0][0]           
+__________________________________________________________________________________________________
+conv4_block6_1_bn (BatchNormali (None, None, None, 2 1024        conv4_block6_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block6_1_relu (Activation (None, None, None, 2 0           conv4_block6_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block6_2_conv (Conv2D)    (None, None, None, 2 590080      conv4_block6_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block6_2_bn (BatchNormali (None, None, None, 2 1024        conv4_block6_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block6_2_relu (Activation (None, None, None, 2 0           conv4_block6_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block6_3_conv (Conv2D)    (None, None, None, 1 263168      conv4_block6_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv4_block6_3_bn (BatchNormali (None, None, None, 1 4096        conv4_block6_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv4_block6_add (Add)          (None, None, None, 1 0           conv4_block5_out[0][0]           
+                                                                 conv4_block6_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv4_block6_out (Activation)   (None, None, None, 1 0           conv4_block6_add[0][0]           
+__________________________________________________________________________________________________
+conv5_block1_1_conv (Conv2D)    (None, None, None, 5 524800      conv4_block6_out[0][0]           
+__________________________________________________________________________________________________
+conv5_block1_1_bn (BatchNormali (None, None, None, 5 2048        conv5_block1_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_1_relu (Activation (None, None, None, 5 0           conv5_block1_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block1_2_conv (Conv2D)    (None, None, None, 5 2359808     conv5_block1_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_2_bn (BatchNormali (None, None, None, 5 2048        conv5_block1_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_2_relu (Activation (None, None, None, 5 0           conv5_block1_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block1_0_conv (Conv2D)    (None, None, None, 2 2099200     conv4_block6_out[0][0]           
+__________________________________________________________________________________________________
+conv5_block1_3_conv (Conv2D)    (None, None, None, 2 1050624     conv5_block1_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_0_bn (BatchNormali (None, None, None, 2 8192        conv5_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_3_bn (BatchNormali (None, None, None, 2 8192        conv5_block1_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block1_add (Add)          (None, None, None, 2 0           conv5_block1_0_bn[0][0]          
+                                                                 conv5_block1_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block1_out (Activation)   (None, None, None, 2 0           conv5_block1_add[0][0]           
+__________________________________________________________________________________________________
+conv5_block2_1_conv (Conv2D)    (None, None, None, 5 1049088     conv5_block1_out[0][0]           
+__________________________________________________________________________________________________
+conv5_block2_1_bn (BatchNormali (None, None, None, 5 2048        conv5_block2_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block2_1_relu (Activation (None, None, None, 5 0           conv5_block2_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block2_2_conv (Conv2D)    (None, None, None, 5 2359808     conv5_block2_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block2_2_bn (BatchNormali (None, None, None, 5 2048        conv5_block2_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block2_2_relu (Activation (None, None, None, 5 0           conv5_block2_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block2_3_conv (Conv2D)    (None, None, None, 2 1050624     conv5_block2_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block2_3_bn (BatchNormali (None, None, None, 2 8192        conv5_block2_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block2_add (Add)          (None, None, None, 2 0           conv5_block1_out[0][0]           
+                                                                 conv5_block2_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block2_out (Activation)   (None, None, None, 2 0           conv5_block2_add[0][0]           
+__________________________________________________________________________________________________
+conv5_block3_1_conv (Conv2D)    (None, None, None, 5 1049088     conv5_block2_out[0][0]           
+__________________________________________________________________________________________________
+conv5_block3_1_bn (BatchNormali (None, None, None, 5 2048        conv5_block3_1_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block3_1_relu (Activation (None, None, None, 5 0           conv5_block3_1_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block3_2_conv (Conv2D)    (None, None, None, 5 2359808     conv5_block3_1_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block3_2_bn (BatchNormali (None, None, None, 5 2048        conv5_block3_2_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block3_2_relu (Activation (None, None, None, 5 0           conv5_block3_2_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block3_3_conv (Conv2D)    (None, None, None, 2 1050624     conv5_block3_2_relu[0][0]        
+__________________________________________________________________________________________________
+conv5_block3_3_bn (BatchNormali (None, None, None, 2 8192        conv5_block3_3_conv[0][0]        
+__________________________________________________________________________________________________
+conv5_block3_add (Add)          (None, None, None, 2 0           conv5_block2_out[0][0]           
+                                                                 conv5_block3_3_bn[0][0]          
+__________________________________________________________________________________________________
+conv5_block3_out (Activation)   (None, None, None, 2 0           conv5_block3_add[0][0]           
+__________________________________________________________________________________________________
+batch_normalization (BatchNorma (None, None, None, 2 8192        conv5_block3_out[0][0]           
+__________________________________________________________________________________________________
+activation (Activation)         (None, None, None, 2 0           batch_normalization[0][0]        
+__________________________________________________________________________________________________
+bridge_conv2d (Conv2D)          (None, None, None, 1 2098176     activation[0][0]                 
+__________________________________________________________________________________________________
+batch_normalization_1 (BatchNor (None, None, None, 1 4096        bridge_conv2d[0][0]              
+__________________________________________________________________________________________________
+up_sampling2d (UpSampling2D)    (None, None, None, 1 0           batch_normalization_1[0][0]      
+__________________________________________________________________________________________________
+batch_normalization_2 (BatchNor (None, None, None, 1 4096        conv4_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+concatenate (Concatenate)       (None, None, None, 2 0           up_sampling2d[0][0]              
+                                                                 batch_normalization_2[0][0]      
+__________________________________________________________________________________________________
+activation_1 (Activation)       (None, None, None, 2 0           concatenate[0][0]                
+__________________________________________________________________________________________________
+conv2d (Conv2D)                 (None, None, None, 5 9437184     activation_1[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_3 (BatchNor (None, None, None, 5 2048        conv2d[0][0]                     
+__________________________________________________________________________________________________
+activation_2 (Activation)       (None, None, None, 5 0           batch_normalization_3[0][0]      
+__________________________________________________________________________________________________
+conv2d_1 (Conv2D)               (None, None, None, 5 2359296     activation_2[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_4 (BatchNor (None, None, None, 5 2048        conv2d_1[0][0]                   
+__________________________________________________________________________________________________
+activation_3 (Activation)       (None, None, None, 5 0           batch_normalization_4[0][0]      
+__________________________________________________________________________________________________
+up_sampling2d_1 (UpSampling2D)  (None, None, None, 5 0           activation_3[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_5 (BatchNor (None, None, None, 5 2048        conv3_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, None, None, 1 0           up_sampling2d_1[0][0]            
+                                                                 batch_normalization_5[0][0]      
+__________________________________________________________________________________________________
+activation_4 (Activation)       (None, None, None, 1 0           concatenate_1[0][0]              
+__________________________________________________________________________________________________
+conv2d_2 (Conv2D)               (None, None, None, 2 2359296     activation_4[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_6 (BatchNor (None, None, None, 2 1024        conv2d_2[0][0]                   
+__________________________________________________________________________________________________
+activation_5 (Activation)       (None, None, None, 2 0           batch_normalization_6[0][0]      
+2020-04-15 11:05:47.246597: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-15 11:05:48.092370: W tensorflow/stream_executor/gpu/redzone_allocator.cc:312] Not found: ./bin/ptxas not found
+Relying on driver to perform ptx compilation. This message will be only logged once.
+2020-04-15 11:05:48.357858: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+__________________________________________________________________________________________________
+conv2d_3 (Conv2D)               (None, None, None, 2 589824      activation_5[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_7 (BatchNor (None, None, None, 2 1024        conv2d_3[0][0]                   
+__________________________________________________________________________________________________
+activation_6 (Activation)       (None, None, None, 2 0           batch_normalization_7[0][0]      
+__________________________________________________________________________________________________
+up_sampling2d_2 (UpSampling2D)  (None, None, None, 2 0           activation_6[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_8 (BatchNor (None, None, None, 2 1024        conv2_block1_0_conv[0][0]        
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, None, None, 5 0           up_sampling2d_2[0][0]            
+                                                                 batch_normalization_8[0][0]      
+__________________________________________________________________________________________________
+activation_7 (Activation)       (None, None, None, 5 0           concatenate_2[0][0]              
+__________________________________________________________________________________________________
+conv2d_4 (Conv2D)               (None, None, None, 1 589824      activation_7[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_9 (BatchNor (None, None, None, 1 512         conv2d_4[0][0]                   
+__________________________________________________________________________________________________
+activation_8 (Activation)       (None, None, None, 1 0           batch_normalization_9[0][0]      
+__________________________________________________________________________________________________
+conv2d_5 (Conv2D)               (None, None, None, 1 147456      activation_8[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_10 (BatchNo (None, None, None, 1 512         conv2d_5[0][0]                   
+__________________________________________________________________________________________________
+activation_9 (Activation)       (None, None, None, 1 0           batch_normalization_10[0][0]     
+__________________________________________________________________________________________________
+up_sampling2d_3 (UpSampling2D)  (None, None, None, 1 0           activation_9[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_11 (BatchNo (None, None, None, 6 256         conv1_conv[0][0]                 
+__________________________________________________________________________________________________
+concatenate_3 (Concatenate)     (None, None, None, 1 0           up_sampling2d_3[0][0]            
+                                                                 batch_normalization_11[0][0]     
+__________________________________________________________________________________________________
+activation_10 (Activation)      (None, None, None, 1 0           concatenate_3[0][0]              
+__________________________________________________________________________________________________
+conv2d_6 (Conv2D)               (None, None, None, 6 110592      activation_10[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_12 (BatchNo (None, None, None, 6 256         conv2d_6[0][0]                   
+__________________________________________________________________________________________________
+activation_11 (Activation)      (None, None, None, 6 0           batch_normalization_12[0][0]     
+__________________________________________________________________________________________________
+conv2d_7 (Conv2D)               (None, None, None, 6 36864       activation_11[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_13 (BatchNo (None, None, None, 6 256         conv2d_7[0][0]                   
+__________________________________________________________________________________________________
+activation_12 (Activation)      (None, None, None, 6 0           batch_normalization_13[0][0]     
+__________________________________________________________________________________________________
+up_sampling2d_4 (UpSampling2D)  (None, None, None, 6 0           activation_12[0][0]              
+__________________________________________________________________________________________________
+output (Conv2D)                 (None, None, None, 4 260         up_sampling2d_4[0][0]            
+==================================================================================================
+Total params: 41,343,876
+Trainable params: 41,267,588
+Non-trainable params: 76,288
+__________________________________________________________________________________________________
+Training completed, predictions built.

@@ -1,6 +1,7 @@
 # See: https://arxiv.org/pdf/1505.04597.pdf
 import tensorflow as tf
 from models import BaseModel
+from models.segmentation.dynamic_unet_model import MeanIoU
 from tensorflow.keras.layers import (
     Dropout,
     Conv2D,
@@ -23,7 +24,7 @@ class VanillaUnetModel(BaseModel):
 
     def compile(self, loss="sparse_categorical_crossentropy"):
         self.model.compile(optimizer=self.optimizer, loss=loss,
-                           metrics=["accuracy", tf.metrics.MeanIoU(num_classes=self.config.n_classes)])
+                           metrics=["accuracy", MeanIoU(num_classes=self.config.n_classes, name="MeanIoU_noBG")])
 
     def create_model(self):
         input_shape = self.config.input_shape

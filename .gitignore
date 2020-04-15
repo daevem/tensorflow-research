@@ -138,4 +138,7 @@ checkpoints/*
 src/model_checkpoints/
 src/predictions/
 src/tensorboard/
+tensorboard/
+predictions/
+model_checkpoints/
 *.h5

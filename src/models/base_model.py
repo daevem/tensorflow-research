@@ -99,7 +99,7 @@ class BaseModel:
             )
         if self.config.train.tensorboard:
             self.callbacks.append(
-                TensorBoard(self.config.train.tensorboard_logdir, profile_batch=0, histogram_freq=5)
+                TensorBoard(os.path.join(self.config.train.tensorboard_logdir, self.config.name), profile_batch=0, histogram_freq=5)
             )
 
     def load_weights(self):

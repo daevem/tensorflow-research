@@ -113,6 +113,7 @@ class Config:
             data = json.load(json_file)
             self.input_shape = data["input_shape"]
             self.n_classes = data["n_classes"]
+            self.name = data["name"]
             self.model = get_entry(data, "model", None)
 
             if not self.model:

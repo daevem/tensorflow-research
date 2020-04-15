@@ -140,7 +140,8 @@ def main():
     # ToDo: Create model
     model = create_model(config)  # type: BaseModel
     model.summary()
-
+    # model.model = tf.keras.models.load_model("resnet50_unet_fullVertAndRand_ks1bridge_lr1e4_freeze0.h5")
+    # exit(0)
     # ToDo: Train model
     model.train()
     history = model.history
@@ -149,7 +150,7 @@ def main():
         # model.model.save_weights(
         #     config.train.checkpoints_path + "/model-{0:04d}.ckpts".format(epochs)
         # )
-        model.save("resnet50_unet_vertical_and_random_slices_catBNrelu_freeze0_featurewise.h5")
+        model.save(config.name+".h5")
         if plot_history:
             model.plot_history()
     # model.model = tf.keras.models.load_model("resnet50_unet_vertical_and_random_slices_catBNrelu.h5")
@@ -188,7 +189,7 @@ def main():
         base_name = mask_name.strip("_gray.png")
         mask_name = base_name + "_color_gt.png"
         pred_name = base_name + "_color_pred.png"
-        path_to_pred = os.path.join("predictions", "resnet50_unet_vertical_and_random_slices_catBNrelu")
+        path_to_pred = os.path.join("predictions", config.name)
         os.makedirs(path_to_pred, exist_ok=True)
         cv2.imwrite(os.path.join(path_to_pred, mask_name), gt)
         cv2.imwrite(os.path.join(path_to_pred, pred_name), pred)

@@ -139,7 +139,7 @@ def main():
 
     # ToDo: Create model
     model = create_model(config)  # type: BaseModel
-    model.summary()
+    model.summary(line_length=150)
     # model.model = tf.keras.models.load_model("resnet50_unet_fullVertAndRand_ks1bridge_lr1e4_freeze0.h5")
     # exit(0)
     # ToDo: Train model

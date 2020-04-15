@@ -142,3 +142,6 @@ class Config:
                 )
             except:
                 self.image_data_generator = None
+
+    def summarize(self):
+        print(self.__dict__)

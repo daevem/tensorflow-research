@@ -51,7 +51,7 @@ class BaseModel:
         return
 
     @abc.abstractmethod
-    def summary(self):
+    def summary(self, line_length=150):
         return
 
     def compile(self, loss=None):
@@ -170,13 +170,13 @@ class BaseModel:
                                                self.config.train.mask_files_path,
                                                # train_images,
                                                classes=self.config.train.classes)
-        self.generators = SegmentationDataGenerator(x, y)  # self.image_mask_generator(x, y)
+        self.generators = SegmentationDataGenerator(x, y, one_hot=True, num_classes=self.config.n_classes)  # self.image_mask_generator(x, y)
 
         x, y = self.generate_directory_datagen(self.config.train.val_files_path,
                                                self.config.train.val_masks_path,
                                                # train_images,  # to achieve same feature-wise stdization
                                                classes=self.config.train.val_classes)
-        self.val_generators = SegmentationDataGenerator(x, y)  # self.image_mask_generator(x, y)
+        self.val_generators = SegmentationDataGenerator(x, y, one_hot=True, num_classes=self.config.n_classes)  # self.image_mask_generator(x, y)
         # self.train_images = x
         # self.y_train = y
 

@@ -1,3 +1,4 @@
+import tensorflow as tf
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from random import randint, random, seed
@@ -6,7 +7,11 @@ import numpy as np
 
 class SegmentationDataGenerator(Sequence):
 
-    def __init__(self, image_generator_flow, mask_generator_flow, slicing_rate=0.7, slice_sizes=None):
+    def __init__(self, image_generator_flow, mask_generator_flow, slicing_rate=0.7, slice_sizes=None, one_hot=False, num_classes=None):
+        self.one_hot = one_hot
+        self.num_classes = num_classes
+        if one_hot:
+            assert self.num_classes is not None
         self.gen_x = image_generator_flow  # type: ImageDataGenerator.flow_from_directory()
         self.gen_y = mask_generator_flow
         if slice_sizes is not None:
@@ -15,6 +20,9 @@ class SegmentationDataGenerator(Sequence):
             self.sizes = [256, 512]  # , 1024]  # TODO calculate basing on image width and height
 
         self.slicing_rate = slicing_rate
+
+    def get_items_names(self, index):
+        return self.gen_x.filenames[index], self.gen_y.filenames[index]
 
     def __getitem__(self, index):
         x, y = next(self.gen_x), next(self.gen_y)
@@ -32,11 +40,21 @@ class SegmentationDataGenerator(Sequence):
             for i in range(x.shape[0]):
                 _xi = x[i]
                 _yi = y[i]
-                _xi, _yi = slicing_func(_xi, _yi, rate=0.25, seed_w=seed_w, seed_h=seed_h)
+                _xi, _yi = slicing_func(_xi, _yi, rate=0.0, seed_w=seed_w, seed_h=seed_h)
                 _x.append(_xi)
                 _y.append(_yi)
             x = np.array(_x)
             y = np.array(_y)
+        if self.one_hot:
+            _y = []
+            for i in range(y.shape[0]):
+                _yi = y[i]
+                _yi = _yi.astype("uint8")
+                if len(_yi.shape) > 2:
+                    _yi = _yi[:, :, 0]
+                _yi = tf.one_hot(_yi, self.num_classes)
+                _y.append(_yi)
+            y = _y
         return x, y
 
     def __len__(self):
@@ -50,7 +68,7 @@ class SegmentationDataGenerator(Sequence):
 
         # do - while
         sliced_mask = y[:, w:w+dw, :].copy()
-        while sliced_mask.max == 0:
+        while sliced_mask.max() == 0.0:
             offset = randint(0, 4 - 1)
             w = dw * offset
             sliced_mask = y[:, w:w+dw, :].copy()
@@ -99,7 +117,7 @@ class SegmentationDataGenerator(Sequence):
         r = random()
         # in case of totally black image (background only) it will be accepted if random number
         # is lower than the specified rate (i.e. higher rate == higher chance to have black images)
-        while sliced_mask.max == 0.0 and r > rate:
+        while sliced_mask.max() == 0.0 and r >= rate:
             h, dh, w, dw = _get_random_slice_params(horizontal_segments, vertical_segments, dw, dh)
             sliced_mask = y[h:h+dh, w:w+dw, :].copy()
             r = random()
